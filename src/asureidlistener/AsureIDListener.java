@@ -30,10 +30,11 @@ public class AsureIDListener {
     
    static  public int getPermanentPermitId(){
        System.out.println("Updating permanent permit");
+       Config config =new Config();
        int max=1;
         try{ 
               Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\USER\\Desktop\\AsureID.mdb","","loo<oage");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
              
               PreparedStatement preparedStatement=conn.prepareStatement("SELECT * FROM PP_2122_1_14_006_1");
              
@@ -85,10 +86,11 @@ public class AsureIDListener {
     }
    static  public int getStaffId(){
        System.out.println("Updating Staff ID");
+       Config config = new Config();
        int max2=0;
         try{ 
               Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\USER\\Desktop\\AsureID.mdb","","loo<oage");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
              
               PreparedStatement preparedStatement=conn.prepareStatement("SELECT * FROM SD_2122_2_14_006_1 ");
              

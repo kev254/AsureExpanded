@@ -18,8 +18,8 @@ public class RemoteAction {
      public void updatePermit(){
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            //Connection con= DriverManager.getConnection("jdbc:mysql://localhost:8012/asureiddb","","");
-            Connection con2= (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/asureiddb", "root", "");
+            Config config = new Config();
+            Connection con2= (Connection) DriverManager.getConnection("jdbc:mysql://"+config.getMysqlhost()+config.getMysqldb(), config.getMysqlUser(), config.getMysqlPassword());
             //System.out.println("Connected");
             int ID=getPermanentPermitId();
             Statement st=con2.createStatement();
@@ -92,9 +92,8 @@ public class RemoteAction {
      public void updateStaffId(){
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            //Connection con= DriverManager.getConnection("jdbc:mysql://localhost:8012/asureiddb","","");
-            Connection con2= (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/asureiddb", "root", "");
-            //System.out.println("Connected");
+            Config config = new Config();
+            Connection con2= (Connection) DriverManager.getConnection("jdbc:mysql://"+config.getMysqlhost()+config.getMysqldb(), config.getMysqlUser(), config.getMysqlPassword());
             int ID2=getStaffId();
             System.out.println(ID2);
             Statement st=con2.createStatement();
