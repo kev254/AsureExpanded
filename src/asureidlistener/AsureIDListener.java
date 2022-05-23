@@ -61,7 +61,7 @@ public class AsureIDListener {
                      ps1.setString(3, date1);
                      ps1.setInt(4, id);
                      ps1.setString(5, by);
-                     ps1.setInt(6, 2);
+                     ps1.setInt(6, 1);
                      
                      ps1.executeUpdate();
                      max=id;
@@ -117,7 +117,7 @@ public class AsureIDListener {
                      ps1.setString(3, date1);
                      ps1.setInt(4, id);
                      ps1.setString(5, by);
-                     ps1.setInt(6, 2);
+                     ps1.setInt(6, 1);
                      
                      ps1.executeUpdate();
                      max2=id;
@@ -140,7 +140,7 @@ public class AsureIDListener {
       
       static public void createUI(){
           JFrame frame = new JFrame();
-          JOptionPane.showMessageDialog(frame, "Remote record updated succesfully","SUCCESS",JOptionPane.QUESTION_MESSAGE);
+          JOptionPane.showMessageDialog(frame, "Success","SUCCESS",JOptionPane.QUESTION_MESSAGE);
       }
 
    
