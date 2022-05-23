@@ -20,12 +20,12 @@ public class AsureIDListener {
         RemoteAction m= new RemoteAction();
         m.updatePermit();
         m.updateStaffId();
-        createUI();
-       
-        
+        LoopTrackSC();
+        LoopTrackP();
 
-        
-  
+
+       
+
     }
     
    static  public int getPermanentPermitId(){
@@ -138,15 +138,126 @@ public class AsureIDListener {
         return max2;
     }
       
-      static public void createUI(){
+  static public void createUI(){
           JFrame frame = new JFrame();
           JOptionPane.showMessageDialog(frame, "Success","SUCCESS",JOptionPane.QUESTION_MESSAGE);
       }
+  public static void updateTrackerP(int id){
+      Config config =new Config();
+       
+        try{ 
+              Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
+             
+                   PreparedStatement ps3= conn.prepareStatement("SELECT * FROM permanent_permit_print_tracker WHERE printid='"+id+"'");
+                   
+                   ResultSet rs3=ps3.executeQuery();
+                   
+                   while(rs3.next()){
+            
+                     PreparedStatement ps1= conn.prepareStatement("UPDATE  permanent_permit_print_tracker SET status=? WHERE printid='"+id+"'");
+                     ps1.setInt(1, 2);
 
-   
+                     ps1.executeUpdate();
+                     
+                   }
+
+          }catch(Exception e){
+              System.out.println("Error in connection"+e);
  
+          }
+        
+      
+  }
+  public static void updateTrackerSC(int id){
+      Config config =new Config();
+       
+        try{ 
+              Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
+             
+                   PreparedStatement ps3= conn.prepareStatement("SELECT * FROM staff_id_print_tracker WHERE printid='"+id+"'");
+                   
+                   ResultSet rs3=ps3.executeQuery();
+                   
+                   while(rs3.next()){
+            
+                     PreparedStatement ps1= conn.prepareStatement("UPDATE  staff_id_print_tracker SET status=? WHERE printid='"+id+"'");
+                     ps1.setInt(1, 2);
 
+                     ps1.executeUpdate();
+                     
+                   }
+
+          }catch(Exception e){
+              System.out.println("Error in connection"+e);
+ 
+          }
+        
+      
+  }
+  
+    public static void LoopTrackP(){
+      Config config =new Config();
+       
+        try{ 
+              Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
+             
+                   PreparedStatement ps3= conn.prepareStatement("SELECT * FROM permanent_permit_print_tracker WHERE status<2");
+                   
+               
+                   
+                   ResultSet rs3=ps3.executeQuery();
+                   
+                   while(rs3.next()){
+                       int id=rs3.getInt("printid");
+                       RemoteAction action =new RemoteAction();
+                       action.loopP(id);
+
+                     
+                   }
+
+          }catch(Exception e){
+              System.out.println("Error in connection"+e);
+ 
+          }
+        
+      
+  }
     
+    public static void LoopTrackSC(){
+      Config config =new Config();
+       
+        try{ 
+              Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
+             
+                   PreparedStatement ps3= conn.prepareStatement("SELECT * FROM staff_id_print_tracker WHERE status<2");
+                   
+               
+                   
+                   ResultSet rs3=ps3.executeQuery();
+                   
+                   while(rs3.next()){
+                       int id=rs3.getInt("printid");
+                       RemoteAction action =new RemoteAction();
+                       action.loopSC(id);
+
+                     
+                   }
+
+          }catch(Exception e){
+              System.out.println("Error in connection"+e);
+ 
+          }
+        
+      
+  }
+
+
+
+
 }  
 
 
