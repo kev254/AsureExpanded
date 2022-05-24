@@ -5,13 +5,10 @@
  */
 package asureidlistener;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,24 +19,6 @@ import java.util.logging.Logger;
 public class Config {
     InputStream input = Config.class.getResourceAsStream("/passwords.properties");
     Properties prop = new Properties();
-    public void readCredenctials(){
-
-
-Properties prop = new Properties();
-          
-            try {
-                prop.load(input);
-                String serverUsername = prop.getProperty("mysqlhost");
-                System.out.println("server Name Is :"+serverUsername+prop.getProperty("mysqldb")+prop.getProperty("mysqlhost")+prop.getProperty("mysqluser"));
-                
-                String serverInterProc = prop.getProperty("mysqldb");
-                System.out.println( prop.getProperty("accesshost")+prop.getProperty("accessdb")+prop.getProperty("accesspassword"));
-               
-            } catch (IOException ex) {
-                Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
-            }
-  
-    }
     public String getAccessHost(){
        String host= null;
 
@@ -51,7 +30,7 @@ Properties prop = new Properties();
             } catch (IOException ex) {
                 Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return host;
+            return accesshost;
 }
     public String getAccessDb(){
        String accessdb= null;
@@ -64,7 +43,7 @@ Properties prop = new Properties();
             } catch (IOException ex) {
                 Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return accessdb;
+            return accessdb2;
 }
     public String getAccessPassword(){
        String password= null;
@@ -77,7 +56,7 @@ Properties prop = new Properties();
             } catch (IOException ex) {
                 Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return password;
+            return accesspassword;
 }
     
     //Mysql
@@ -92,7 +71,7 @@ Properties prop = new Properties();
             } catch (IOException ex) {
                 Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return host;
+            return mysqlhost;
 }
     public String getMysqldb(){
        String db= null;
@@ -105,7 +84,7 @@ Properties prop = new Properties();
             } catch (IOException ex) {
                 Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return db;
+            return mysqldb;
 }
     public String getMysqlUser(){
        String user= null;
@@ -118,7 +97,7 @@ Properties prop = new Properties();
             } catch (IOException ex) {
                 Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return user;
+            return mysqluser;
 }
     public String getMysqlPassword(){
        String password= null;
@@ -131,9 +110,20 @@ Properties prop = new Properties();
             } catch (IOException ex) {
                 Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return password;
+            return mysqlpassword;
 }
+//String mysqlhost="192.168.137.167:3306/";
+//String mysqldb= "asureiddb";
+//String mysqluser="kaaasureiddev";
+//String mysqlpassword="89!Roc*k";
+String mysqlhost="localhost:3306/";
+String mysqldb= "asureiddb";
+String mysqluser="root";
+String mysqlpassword="";
 
-   
-    
+
+String accesshost="C:\\ProgramData\\HID Global\\Asure ID\\";
+String accessdb2="AsureID.mdb";
+String accesspassword="loo<oage";
+  
 }

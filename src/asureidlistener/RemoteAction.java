@@ -79,9 +79,10 @@ public class RemoteAction {
                    ps3.setInt(1,ID);
                    ps3.executeUpdate();
                    updateTrackerP(ID);
+                   createUI();
                    
                   System.out.println("Record migrated from permanent_pass_print_mgr to permanent_pass_printed_cards_mgr succesfully");
-                  createUI();
+                  
                 
             }
               else{

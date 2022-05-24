@@ -13,18 +13,17 @@ import javax.swing.JOptionPane;
  */
 public class AsureIDListener {
     
-
-    public static void main(String[] args) {
+public static void main(String[] args) {
+    
         
-       
         RemoteAction m= new RemoteAction();
         m.updatePermit();
         m.updateStaffId();
-        LoopTrackSC();
+
         LoopTrackP();
+        LoopTrackSC();
 
 
-       
 
     }
     
@@ -217,6 +216,8 @@ public class AsureIDListener {
 
                      
                    }
+                   
+                   
 
           }catch(Exception e){
               System.out.println("Error in connection"+e);
