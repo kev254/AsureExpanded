@@ -25,6 +25,7 @@ public static void main(String[] args) {
 
 
 
+
     }
     
    static  public int getPermanentPermitId(){
@@ -70,10 +71,7 @@ public static void main(String[] args) {
                    }
                        
                    }
-                
-                   
-                   
-                   
+ 
               }
  
           }catch(Exception e){
@@ -121,8 +119,6 @@ public static void main(String[] args) {
                      ps1.executeUpdate();
                      max2=id;
 
-
-
                    }
                        
                    }
@@ -137,9 +133,14 @@ public static void main(String[] args) {
         return max2;
     }
       
-  static public void createUI(){
+  static public void createPermitUI(){
           JFrame frame = new JFrame();
-          JOptionPane.showMessageDialog(frame, "Success","SUCCESS",JOptionPane.QUESTION_MESSAGE);
+          JOptionPane.showMessageDialog(frame, "Permanent permit updated.","SUCCESS",JOptionPane.INFORMATION_MESSAGE);
+          
+      }
+  static public void createtafftUI(){
+          JFrame frame = new JFrame();
+          JOptionPane.showMessageDialog(frame, "Staff card updated","SUCCESS",JOptionPane.INFORMATION_MESSAGE);
       }
   public static void updateTrackerP(int id){
       Config config =new Config();

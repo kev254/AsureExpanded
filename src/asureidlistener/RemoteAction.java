@@ -5,7 +5,8 @@
  */
 package asureidlistener;
 
-import static asureidlistener.AsureIDListener.createUI;
+import static asureidlistener.AsureIDListener.createPermitUI;
+import static asureidlistener.AsureIDListener.createtafftUI;
 import static asureidlistener.AsureIDListener.getPermanentPermitId;
 import static asureidlistener.AsureIDListener.getStaffId;
 import static asureidlistener.AsureIDListener.updateTrackerP;
@@ -79,7 +80,7 @@ public class RemoteAction {
                    ps3.setInt(1,ID);
                    ps3.executeUpdate();
                    updateTrackerP(ID);
-                   createUI();
+                   createPermitUI();
                    
                   System.out.println("Record migrated from permanent_pass_print_mgr to permanent_pass_printed_cards_mgr succesfully");
                   
@@ -162,7 +163,7 @@ public class RemoteAction {
                    updateTrackerSC(ID2);
                    
                   System.out.println("Record migrated from staff_id_print_mgr to staff_id_printed_cards_mgr succesfully");
-                  createUI();
+                  createtafftUI();
                 
             }
               else{
