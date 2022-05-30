@@ -112,10 +112,7 @@ public class Config {
             }
             return mysqlpassword;
 }
-//String mysqlhost="192.168.137.167:3306/";
-//String mysqldb= "asureiddb";
-//String mysqluser="kaaasureiddev";
-//String mysqlpassword="89!Roc*k";
+
 String mysqlhost="localhost:3306/";
 String mysqldb= "asureiddb";
 String mysqluser="root";
