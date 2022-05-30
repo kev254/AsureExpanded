@@ -2,7 +2,11 @@
 package asureidlistener;
 
 import static asureidlistener.AsureIDListener.createApronLoungeUI;
+import static asureidlistener.AsureIDListener.createApronTaxwayUI;
 import static asureidlistener.AsureIDListener.createApronUI;
+import static asureidlistener.AsureIDListener.createBaggageHallUI;
+import static asureidlistener.AsureIDListener.createCheckinCounterUI;
+import static asureidlistener.AsureIDListener.createConCourseUI;
 import static asureidlistener.AsureIDListener.createFreightUI;
 import static asureidlistener.AsureIDListener.createLoungesUI;
 import static asureidlistener.AsureIDListener.createPermitUI;
@@ -11,6 +15,10 @@ import static asureidlistener.AsureIDListener.createtafftUI;
 import static asureidlistener.AsureIDListener.getAirsideId;
 import static asureidlistener.AsureIDListener.getApronId;
 import static asureidlistener.AsureIDListener.getApronLoungesId;
+import static asureidlistener.AsureIDListener.getApronTaxwayId;
+import static asureidlistener.AsureIDListener.getBaggageHallId;
+import static asureidlistener.AsureIDListener.getCheckinCounterId;
+import static asureidlistener.AsureIDListener.getConCourseId;
 import static asureidlistener.AsureIDListener.getFreightId;
 import static asureidlistener.AsureIDListener.getLoungesId;
 import static asureidlistener.AsureIDListener.getPermanentPermitId;
@@ -18,11 +26,15 @@ import static asureidlistener.AsureIDListener.getSecurityId;
 import static asureidlistener.AsureIDListener.getStaffId;
 import static asureidlistener.AsureIDListener.updateTrackerAirside;
 import static asureidlistener.AsureIDListener.updateTrackerApron;
+import static asureidlistener.AsureIDListener.updateTrackerBaggageHall;
+import static asureidlistener.AsureIDListener.updateTrackerCheckinCounter;
+import static asureidlistener.AsureIDListener.updateTrackerConCourse;
 import static asureidlistener.AsureIDListener.updateTrackerFreight;
 import static asureidlistener.AsureIDListener.updateTrackerLounges;
 import static asureidlistener.AsureIDListener.updateTrackerP;
 import static asureidlistener.AsureIDListener.updateTrackerSC;
 import static asureidlistener.AsureIDListener.updateTrackerSecurity;
+import static asureidlistener.AsureIDListener.updateTrackerTaxway;
 import com.mysql.jdbc.*;
 
 import java.sql.DriverManager;
@@ -1276,6 +1288,624 @@ public class RemoteAction {
             System.out.println("Not Connected"+ex);
         }
    }
+        //updating remote Mysql for the Aprons 
+     public void updateApronTaxways(){
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Config config = new Config();
+            Connection con2= (Connection) DriverManager.getConnection("jdbc:mysql://"+config.getMysqlhost()+config.getMysqldb(), config.getMysqlUser(), config.getMysqlPassword());
+            //System.out.println("Connected");
+            int ID=getApronTaxwayId();
+            Statement st=con2.createStatement();
+            ResultSet rs= st.executeQuery("SELECT * FROM pa_aprontaxwayrunway_print_mgr WHERE id='"+ID+"'");
+            while(rs.next()){
+
+              int id=rs.getInt(1);
+              String permit_no=rs.getString(2);
+              String permit_type=rs.getString(3);
+              String access_area=rs.getString(4);
+              String applicant_name=rs.getString(5);
+              String doc_no=rs.getString(6);
+              String operator=rs.getString(7);
+              String designation=rs.getString(8);
+              String application_date=rs.getString(9);
+              String expiry_date=rs.getString(10);
+              String applicant_photo_file=rs.getString(11);
+              String applicant_photo=rs.getString(12);
+              String applicant_signature_file=rs.getString(13);
+              String applicant_signature=rs.getString(14);
+              String ceo_signature_file=rs.getString(15).toString().trim();
+              String ceo_signature=rs.getString(16);
+              String batch_id=rs.getString(17);
+              String airport_airstrip_name=rs.getString(18);
+              String print_template_name=rs.getString(19);
+              String date=rs.getString(20);
+              
+              
+              PreparedStatement ps2= con2.prepareStatement("INSERT INTO pa_aprontaxwayrunway_printed_cards_mgr VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+              ps2.setInt(1,id);
+              ps2.setString(2, permit_no);
+              ps2.setString(3, permit_type);
+              ps2.setString(4, access_area);
+              ps2.setString(5,applicant_name);
+              ps2.setString(6, doc_no);
+              ps2.setString(7,operator);
+              ps2.setString(8, designation);
+              ps2.setString(9,application_date);
+              ps2.setString(10,expiry_date);
+              ps2.setString(11,applicant_photo_file);
+              ps2.setString(12,applicant_photo);
+              ps2.setString(13,applicant_signature_file);
+              ps2.setString(14,applicant_signature);
+              ps2.setString(15,ceo_signature_file);
+              ps2.setString(16,ceo_signature);
+              ps2.setString(17,batch_id);
+              ps2.setString(18,airport_airstrip_name);
+              ps2.setString(19,print_template_name);
+              ps2.setString(20,date);
+              
+              int check=ps2.executeUpdate();
+              if(check>0){
+                   PreparedStatement ps3= con2.prepareStatement("DELETE FROM pa_aprontaxwayrunway_print_mgr WHERE id=?");
+                   ps3.setInt(1,ID);
+                   ps3.executeUpdate();
+                   updateTrackerTaxway(ID);
+                   createApronTaxwayUI();
+                   
+                  System.out.println("Apron Taxway runway  Record migrated  succesfully");
+                  
+                
+            }
+              else{
+                  System.out.println("Not data inserted");
+              }
+              
+            }
+            
+        } catch (Exception ex) {
+            System.out.println("Not Connected"+ex);
+        }
+   }
+     public void loopApronTaxways(int ID){
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Config config = new Config();
+            Connection con2= (Connection) DriverManager.getConnection("jdbc:mysql://"+config.getMysqlhost()+config.getMysqldb(), config.getMysqlUser(), config.getMysqlPassword());
+            //System.out.println("Connected");
+            
+            Statement st=con2.createStatement();
+            ResultSet rs= st.executeQuery("SELECT * FROM pa_aprontaxwayrunway_print_mgr WHERE id='"+ID+"'");
+            while(rs.next()){
+
+              int id=rs.getInt(1);
+              String permit_no=rs.getString(2);
+              String permit_type=rs.getString(3);
+              String access_area=rs.getString(4);
+              String applicant_name=rs.getString(5);
+              String doc_no=rs.getString(6);
+              String operator=rs.getString(7);
+              String designation=rs.getString(8);
+              String application_date=rs.getString(9);
+              String expiry_date=rs.getString(10);
+              String applicant_photo_file=rs.getString(11);
+              String applicant_photo=rs.getString(12);
+              String applicant_signature_file=rs.getString(13);
+              String applicant_signature=rs.getString(14);
+              String ceo_signature_file=rs.getString(15).toString().trim();
+              String ceo_signature=rs.getString(16);
+              String batch_id=rs.getString(17);
+              String airport_airstrip_name=rs.getString(18);
+              String print_template_name=rs.getString(19);
+              String date=rs.getString(20);
+              
+              
+              PreparedStatement ps2= con2.prepareStatement("INSERT INTO pa_aprontaxwayrunway_printed_cards_mgr VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+              ps2.setInt(1,id);
+              ps2.setString(2, permit_no);
+              ps2.setString(3, permit_type);
+              ps2.setString(4, access_area);
+              ps2.setString(5,applicant_name);
+              ps2.setString(6, doc_no);
+              ps2.setString(7,operator);
+              ps2.setString(8, designation);
+              ps2.setString(9,application_date);
+              ps2.setString(10,expiry_date);
+              ps2.setString(11,applicant_photo_file);
+              ps2.setString(12,applicant_photo);
+              ps2.setString(13,applicant_signature_file);
+              ps2.setString(14,applicant_signature);
+              ps2.setString(15,ceo_signature_file);
+              ps2.setString(16,ceo_signature);
+              ps2.setString(17,batch_id);
+              ps2.setString(18,airport_airstrip_name);
+              ps2.setString(19,print_template_name);
+              ps2.setString(20,date);
+              
+              int check=ps2.executeUpdate();
+              if(check>0){
+                   PreparedStatement ps3= con2.prepareStatement("DELETE FROM pa_aprontaxwayrunway_print_mgr WHERE id=?");
+                   ps3.setInt(1,ID);
+                   ps3.executeUpdate();
+                   updateTrackerTaxway(ID);
+                   
+                  System.out.println("Apron Taxway Record migrated  succesfully");
+                
+            }
+              else{
+                  System.out.println("Not data inserted");
+              }
+              
+            }
+            
+        } catch (Exception ex) {
+            System.out.println("Not Connected"+ex);
+        }
+   }
+     
+         //updating remote Mysql for the Baggage Hall 
+     public void updateBaggageHalls(){
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Config config = new Config();
+            Connection con2= (Connection) DriverManager.getConnection("jdbc:mysql://"+config.getMysqlhost()+config.getMysqldb(), config.getMysqlUser(), config.getMysqlPassword());
+            //System.out.println("Connected");
+            int ID=getBaggageHallId();
+            Statement st=con2.createStatement();
+            ResultSet rs= st.executeQuery("SELECT * FROM pa_baggagehall_print_mgr WHERE id='"+ID+"'");
+            while(rs.next()){
+
+              int id=rs.getInt(1);
+              String permit_no=rs.getString(2);
+              String permit_type=rs.getString(3);
+              String access_area=rs.getString(4);
+              String applicant_name=rs.getString(5);
+              String doc_no=rs.getString(6);
+              String operator=rs.getString(7);
+              String designation=rs.getString(8);
+              String application_date=rs.getString(9);
+              String expiry_date=rs.getString(10);
+              String applicant_photo_file=rs.getString(11);
+              String applicant_photo=rs.getString(12);
+              String applicant_signature_file=rs.getString(13);
+              String applicant_signature=rs.getString(14);
+              String ceo_signature_file=rs.getString(15).toString().trim();
+              String ceo_signature=rs.getString(16);
+              String batch_id=rs.getString(17);
+              String airport_airstrip_name=rs.getString(18);
+              String print_template_name=rs.getString(19);
+              String date=rs.getString(20);
+              
+              
+              PreparedStatement ps2= con2.prepareStatement("INSERT INTO pa_baggagehall_printed_cards_mgr VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+              ps2.setInt(1,id);
+              ps2.setString(2, permit_no);
+              ps2.setString(3, permit_type);
+              ps2.setString(4, access_area);
+              ps2.setString(5,applicant_name);
+              ps2.setString(6, doc_no);
+              ps2.setString(7,operator);
+              ps2.setString(8, designation);
+              ps2.setString(9,application_date);
+              ps2.setString(10,expiry_date);
+              ps2.setString(11,applicant_photo_file);
+              ps2.setString(12,applicant_photo);
+              ps2.setString(13,applicant_signature_file);
+              ps2.setString(14,applicant_signature);
+              ps2.setString(15,ceo_signature_file);
+              ps2.setString(16,ceo_signature);
+              ps2.setString(17,batch_id);
+              ps2.setString(18,airport_airstrip_name);
+              ps2.setString(19,print_template_name);
+              ps2.setString(20,date);
+              
+              int check=ps2.executeUpdate();
+              if(check>0){
+                   PreparedStatement ps3= con2.prepareStatement("DELETE FROM pa_baggagehall_print_mgr WHERE id=?");
+                   ps3.setInt(1,ID);
+                   ps3.executeUpdate();
+                   updateTrackerBaggageHall(ID);
+                   createBaggageHallUI();
+                   
+                  System.out.println("Baggage Hall  Record migrated  succesfully");
+                  
+                
+            }
+              else{
+                  System.out.println("Not data inserted");
+              }
+              
+            }
+            
+        } catch (Exception ex) {
+            System.out.println("Not Connected"+ex);
+        }
+   }
+     public void loopBaggageHalls(int ID){
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Config config = new Config();
+            Connection con2= (Connection) DriverManager.getConnection("jdbc:mysql://"+config.getMysqlhost()+config.getMysqldb(), config.getMysqlUser(), config.getMysqlPassword());
+            //System.out.println("Connected");
+            
+            Statement st=con2.createStatement();
+            ResultSet rs= st.executeQuery("SELECT * FROM pa_baggagehall_print_mgr WHERE id='"+ID+"'");
+            while(rs.next()){
+
+              int id=rs.getInt(1);
+              String permit_no=rs.getString(2);
+              String permit_type=rs.getString(3);
+              String access_area=rs.getString(4);
+              String applicant_name=rs.getString(5);
+              String doc_no=rs.getString(6);
+              String operator=rs.getString(7);
+              String designation=rs.getString(8);
+              String application_date=rs.getString(9);
+              String expiry_date=rs.getString(10);
+              String applicant_photo_file=rs.getString(11);
+              String applicant_photo=rs.getString(12);
+              String applicant_signature_file=rs.getString(13);
+              String applicant_signature=rs.getString(14);
+              String ceo_signature_file=rs.getString(15).toString().trim();
+              String ceo_signature=rs.getString(16);
+              String batch_id=rs.getString(17);
+              String airport_airstrip_name=rs.getString(18);
+              String print_template_name=rs.getString(19);
+              String date=rs.getString(20);
+              
+              
+              PreparedStatement ps2= con2.prepareStatement("INSERT INTO pa_baggagehall_printed_cards_mgr VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+              ps2.setInt(1,id);
+              ps2.setString(2, permit_no);
+              ps2.setString(3, permit_type);
+              ps2.setString(4, access_area);
+              ps2.setString(5,applicant_name);
+              ps2.setString(6, doc_no);
+              ps2.setString(7,operator);
+              ps2.setString(8, designation);
+              ps2.setString(9,application_date);
+              ps2.setString(10,expiry_date);
+              ps2.setString(11,applicant_photo_file);
+              ps2.setString(12,applicant_photo);
+              ps2.setString(13,applicant_signature_file);
+              ps2.setString(14,applicant_signature);
+              ps2.setString(15,ceo_signature_file);
+              ps2.setString(16,ceo_signature);
+              ps2.setString(17,batch_id);
+              ps2.setString(18,airport_airstrip_name);
+              ps2.setString(19,print_template_name);
+              ps2.setString(20,date);
+              
+              int check=ps2.executeUpdate();
+              if(check>0){
+                   PreparedStatement ps3= con2.prepareStatement("DELETE FROM pa_baggagehall_print_mgr WHERE id=?");
+                   ps3.setInt(1,ID);
+                   ps3.executeUpdate();
+                   updateTrackerTaxway(ID);
+                   
+                  System.out.println("Baggage Hall Record migrated  succesfully");
+                
+            }
+              else{
+                  System.out.println("Not data inserted");
+              }
+              
+            }
+            
+        } catch (Exception ex) {
+            System.out.println("Not Connected"+ex);
+        }
+   }
+     
+     
+         //updating remote Mysql for the checkin counter 
+     public void updateCheckinCounters(){
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Config config = new Config();
+            Connection con2= (Connection) DriverManager.getConnection("jdbc:mysql://"+config.getMysqlhost()+config.getMysqldb(), config.getMysqlUser(), config.getMysqlPassword());
+            //System.out.println("Connected");
+            int ID=getCheckinCounterId();
+            System.out.println(ID);
+            Statement st=con2.createStatement();
+            ResultSet rs= st.executeQuery("SELECT * FROM pa_checkincounter_print_mgr WHERE id='"+ID+"'");
+            while(rs.next()){
+
+              int id=rs.getInt(1);
+              String permit_no=rs.getString(2);
+              String permit_type=rs.getString(3);
+              String access_area=rs.getString(4);
+              String applicant_name=rs.getString(5);
+              String doc_no=rs.getString(6);
+              String operator=rs.getString(7);
+              String designation=rs.getString(8);
+              String application_date=rs.getString(9);
+              String expiry_date=rs.getString(10);
+              String applicant_photo_file=rs.getString(11);
+              String applicant_photo=rs.getString(12);
+              String applicant_signature_file=rs.getString(13);
+              String applicant_signature=rs.getString(14);
+              String ceo_signature_file=rs.getString(15).toString().trim();
+              String ceo_signature=rs.getString(16);
+              String batch_id=rs.getString(17);
+              String airport_airstrip_name=rs.getString(18);
+              String print_template_name=rs.getString(19);
+              String date=rs.getString(20);
+              
+              
+              PreparedStatement ps2= con2.prepareStatement("INSERT INTO pa_checkincounter_printed_cards_mgr VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+              ps2.setInt(1,id);
+              ps2.setString(2, permit_no);
+              ps2.setString(3, permit_type);
+              ps2.setString(4, access_area);
+              ps2.setString(5,applicant_name);
+              ps2.setString(6, doc_no);
+              ps2.setString(7,operator);
+              ps2.setString(8, designation);
+              ps2.setString(9,application_date);
+              ps2.setString(10,expiry_date);
+              ps2.setString(11,applicant_photo_file);
+              ps2.setString(12,applicant_photo);
+              ps2.setString(13,applicant_signature_file);
+              ps2.setString(14,applicant_signature);
+              ps2.setString(15,ceo_signature_file);
+              ps2.setString(16,ceo_signature);
+              ps2.setString(17,batch_id);
+              ps2.setString(18,airport_airstrip_name);
+              ps2.setString(19,print_template_name);
+              ps2.setString(20,date);
+              
+              int check=ps2.executeUpdate();
+              if(check>0){
+                   PreparedStatement ps3= con2.prepareStatement("DELETE FROM pa_checkincounter_print_mgr WHERE id=?");
+                   ps3.setInt(1,ID);
+                   ps3.executeUpdate();
+                   updateTrackerCheckinCounter(ID);
+                   createCheckinCounterUI();
+                   
+                  System.out.println("Checkin counter  Record migrated  succesfully");
+                  
+                
+            }
+              else{
+                  System.out.println("Not data inserted");
+              }
+              
+            }
+            
+        } catch (Exception ex) {
+            System.out.println("Not Connected"+ex);
+        }
+   }
+     public void loopCheckinCounters(int ID){
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Config config = new Config();
+            Connection con2= (Connection) DriverManager.getConnection("jdbc:mysql://"+config.getMysqlhost()+config.getMysqldb(), config.getMysqlUser(), config.getMysqlPassword());
+            //System.out.println("Connected");
+            
+            Statement st=con2.createStatement();
+            ResultSet rs= st.executeQuery("SELECT * FROM pa_checkincounter_print_mgr WHERE id='"+ID+"'");
+            while(rs.next()){
+
+              int id=rs.getInt(1);
+              String permit_no=rs.getString(2);
+              String permit_type=rs.getString(3);
+              String access_area=rs.getString(4);
+              String applicant_name=rs.getString(5);
+              String doc_no=rs.getString(6);
+              String operator=rs.getString(7);
+              String designation=rs.getString(8);
+              String application_date=rs.getString(9);
+              String expiry_date=rs.getString(10);
+              String applicant_photo_file=rs.getString(11);
+              String applicant_photo=rs.getString(12);
+              String applicant_signature_file=rs.getString(13);
+              String applicant_signature=rs.getString(14);
+              String ceo_signature_file=rs.getString(15).toString().trim();
+              String ceo_signature=rs.getString(16);
+              String batch_id=rs.getString(17);
+              String airport_airstrip_name=rs.getString(18);
+              String print_template_name=rs.getString(19);
+              String date=rs.getString(20);
+              
+              
+              PreparedStatement ps2= con2.prepareStatement("INSERT INTO pa_checkincounter_printed_cards_mgr VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+              ps2.setInt(1,id);
+              ps2.setString(2, permit_no);
+              ps2.setString(3, permit_type);
+              ps2.setString(4, access_area);
+              ps2.setString(5,applicant_name);
+              ps2.setString(6, doc_no);
+              ps2.setString(7,operator);
+              ps2.setString(8, designation);
+              ps2.setString(9,application_date);
+              ps2.setString(10,expiry_date);
+              ps2.setString(11,applicant_photo_file);
+              ps2.setString(12,applicant_photo);
+              ps2.setString(13,applicant_signature_file);
+              ps2.setString(14,applicant_signature);
+              ps2.setString(15,ceo_signature_file);
+              ps2.setString(16,ceo_signature);
+              ps2.setString(17,batch_id);
+              ps2.setString(18,airport_airstrip_name);
+              ps2.setString(19,print_template_name);
+              ps2.setString(20,date);
+              
+              int check=ps2.executeUpdate();
+              if(check>0){
+                   PreparedStatement ps3= con2.prepareStatement("DELETE FROM pa_checkincounter_print_mgr WHERE id=?");
+                   ps3.setInt(1,ID);
+                   ps3.executeUpdate();
+                   updateTrackerTaxway(ID);
+                   
+                  System.out.println("Checkin counter Record migrated  succesfully");
+                
+            }
+              else{
+                  System.out.println("Not data inserted");
+              }
+              
+            }
+            
+        } catch (Exception ex) {
+            System.out.println("Not Connected"+ex);
+        }
+   }
+     
+     //updating remote Mysql for the Aprons 
+     public void updateConCourses(){
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Config config = new Config();
+            Connection con2= (Connection) DriverManager.getConnection("jdbc:mysql://"+config.getMysqlhost()+config.getMysqldb(), config.getMysqlUser(), config.getMysqlPassword());
+            //System.out.println("Connected");
+            int ID=getConCourseId();
+            Statement st=con2.createStatement();
+            ResultSet rs= st.executeQuery("SELECT * FROM pa_concoursearrivals_print_mgr WHERE id='"+ID+"'");
+            while(rs.next()){
+
+              int id=rs.getInt(1);
+              String permit_no=rs.getString(2);
+              String permit_type=rs.getString(3);
+              String access_area=rs.getString(4);
+              String applicant_name=rs.getString(5);
+              String doc_no=rs.getString(6);
+              String operator=rs.getString(7);
+              String designation=rs.getString(8);
+              String application_date=rs.getString(9);
+              String expiry_date=rs.getString(10);
+              String applicant_photo_file=rs.getString(11);
+              String applicant_photo=rs.getString(12);
+              String applicant_signature_file=rs.getString(13);
+              String applicant_signature=rs.getString(14);
+              String ceo_signature_file=rs.getString(15).toString().trim();
+              String ceo_signature=rs.getString(16);
+              String batch_id=rs.getString(17);
+              String airport_airstrip_name=rs.getString(18);
+              String print_template_name=rs.getString(19);
+              String date=rs.getString(20);
+              
+              
+              PreparedStatement ps2= con2.prepareStatement("INSERT INTO pa_concoursearrivals_printed_cards_mgr VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+              ps2.setInt(1,id);
+              ps2.setString(2, permit_no);
+              ps2.setString(3, permit_type);
+              ps2.setString(4, access_area);
+              ps2.setString(5,applicant_name);
+              ps2.setString(6, doc_no);
+              ps2.setString(7,operator);
+              ps2.setString(8, designation);
+              ps2.setString(9,application_date);
+              ps2.setString(10,expiry_date);
+              ps2.setString(11,applicant_photo_file);
+              ps2.setString(12,applicant_photo);
+              ps2.setString(13,applicant_signature_file);
+              ps2.setString(14,applicant_signature);
+              ps2.setString(15,ceo_signature_file);
+              ps2.setString(16,ceo_signature);
+              ps2.setString(17,batch_id);
+              ps2.setString(18,airport_airstrip_name);
+              ps2.setString(19,print_template_name);
+              ps2.setString(20,date);
+              
+              int check=ps2.executeUpdate();
+              if(check>0){
+                   PreparedStatement ps3= con2.prepareStatement("DELETE FROM pa_concoursearrivals_print_mgr WHERE id=?");
+                   ps3.setInt(1,ID);
+                   ps3.executeUpdate();
+                   updateTrackerConCourse(ID);
+                   createConCourseUI();
+                   
+                  System.out.println("Con Course arrival  Record migrated  succesfully");
+                  
+                
+            }
+              else{
+                  System.out.println("Not data inserted");
+              }
+              
+            }
+            
+        } catch (Exception ex) {
+            System.out.println("Not Connected"+ex);
+        }
+   }
+     public void loopConCourses(int ID){
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Config config = new Config();
+            Connection con2= (Connection) DriverManager.getConnection("jdbc:mysql://"+config.getMysqlhost()+config.getMysqldb(), config.getMysqlUser(), config.getMysqlPassword());
+            //System.out.println("Connected");
+            
+            Statement st=con2.createStatement();
+            ResultSet rs= st.executeQuery("SELECT * FROM pa_concoursearrivals_print_mgr WHERE id='"+ID+"'");
+            while(rs.next()){
+
+              int id=rs.getInt(1);
+              String permit_no=rs.getString(2);
+              String permit_type=rs.getString(3);
+              String access_area=rs.getString(4);
+              String applicant_name=rs.getString(5);
+              String doc_no=rs.getString(6);
+              String operator=rs.getString(7);
+              String designation=rs.getString(8);
+              String application_date=rs.getString(9);
+              String expiry_date=rs.getString(10);
+              String applicant_photo_file=rs.getString(11);
+              String applicant_photo=rs.getString(12);
+              String applicant_signature_file=rs.getString(13);
+              String applicant_signature=rs.getString(14);
+              String ceo_signature_file=rs.getString(15).toString().trim();
+              String ceo_signature=rs.getString(16);
+              String batch_id=rs.getString(17);
+              String airport_airstrip_name=rs.getString(18);
+              String print_template_name=rs.getString(19);
+              String date=rs.getString(20);
+              
+              
+              PreparedStatement ps2= con2.prepareStatement("INSERT INTO pa_concoursearrivals_printed_cards_mgr VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+              ps2.setInt(1,id);
+              ps2.setString(2, permit_no);
+              ps2.setString(3, permit_type);
+              ps2.setString(4, access_area);
+              ps2.setString(5,applicant_name);
+              ps2.setString(6, doc_no);
+              ps2.setString(7,operator);
+              ps2.setString(8, designation);
+              ps2.setString(9,application_date);
+              ps2.setString(10,expiry_date);
+              ps2.setString(11,applicant_photo_file);
+              ps2.setString(12,applicant_photo);
+              ps2.setString(13,applicant_signature_file);
+              ps2.setString(14,applicant_signature);
+              ps2.setString(15,ceo_signature_file);
+              ps2.setString(16,ceo_signature);
+              ps2.setString(17,batch_id);
+              ps2.setString(18,airport_airstrip_name);
+              ps2.setString(19,print_template_name);
+              ps2.setString(20,date);
+              
+              int check=ps2.executeUpdate();
+              if(check>0){
+                   PreparedStatement ps3= con2.prepareStatement("DELETE FROM pa_concoursearrivals_print_mgr WHERE id=?");
+                   ps3.setInt(1,ID);
+                   ps3.executeUpdate();
+                   updateTrackerTaxway(ID);
+                   
+                  System.out.println("Con Courses Record migrated  succesfully");
+                
+            }
+              else{
+                  System.out.println("Not data inserted");
+              }
+              
+            }
+            
+        } catch (Exception ex) {
+            System.out.println("Not Connected"+ex);
+        }
+   }
+     
      
 
     

@@ -17,8 +17,16 @@ public static void main(String[] args) {
     
         
         RemoteAction m= new RemoteAction();
-        m.updateApronLounges();
-        LoopTrackApronLounge();
+        m.updateConCourses();
+        LoopTrackConCourse();
+//        m.updateCheckinCounters();
+//        LoopTrackCheckinCounter();
+//        m.updateBaggageHalls();
+//        LoopTrackBaggageHall();
+//        m.updateApronTaxways();
+//        LoopTrackTaxway();
+//        m.updateApronLounges();
+//        LoopTrackApronLounge();
 //        m.updateAprons();
 //        LoopTrackApron();
 //        m.updateAirsides();
@@ -935,6 +943,461 @@ public static void main(String[] args) {
                        int id=rs3.getInt("printid");
                        RemoteAction action =new RemoteAction();
                        action.loopApronLounges(id);
+
+                     
+                   }
+
+          }catch(Exception e){
+              System.out.println("Error in connection"+e);
+ 
+          }
+        
+      
+  }
+   
+    //Apron lounge Permit   MS Access manipulation 
+   static  public int getApronTaxwayId(){
+       System.out.println("Updating Taxway Lounge passes");
+       Config config = new Config();
+       int max2=0;
+        try{ 
+              Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
+              
+              PreparedStatement preparedStatement=conn.prepareStatement("SELECT * FROM pp_2122_2_16_2_005_1");
+             
+              ResultSet resultSet=preparedStatement.executeQuery();
+              while(resultSet.next()){
+                   int count=resultSet.getInt("PrintCount");
+                   String by=resultSet.getString("PrintBy");
+                   String date1=resultSet.getString("PrintDateTime");
+                   int id=resultSet.getInt("id");
+                   
+                   
+                   Statement st2=conn.createStatement();
+                   PreparedStatement ps3= conn.prepareStatement("SELECT * FROM pa_aprontaxwayrunway_print_tracker WHERE printid=?");
+                   ps3.setInt(1,id);
+                   ResultSet rs3=ps3.executeQuery();
+                   
+                   if(!rs3.next()){
+                       if(count>0){
+                      
+                       
+                     String date=java.time.LocalDate.now().toString();
+                     PreparedStatement ps1= conn.prepareStatement("insert into pa_aprontaxwayrunway_print_tracker values(?,?,?,?,?,?)");
+                     ps1.setInt(1, 1);
+                     ps1.setString(2, date);
+                     ps1.setString(3, date1);
+                     ps1.setInt(4, id);
+                     ps1.setString(5, by);
+                     ps1.setInt(6, 1);
+                     
+                     ps1.executeUpdate();
+                     max2=id;
+
+                   }
+                       
+                   }
+  
+              }
+ 
+          }catch(Exception e){
+              System.out.println("Error in connection"+e);
+ 
+          }
+        
+        return max2;
+    }   
+   static public void createApronTaxwayUI(){
+          JFrame frame = new JFrame();
+          JOptionPane.showMessageDialog(frame, "Apron Taxway runway record updated","SUCCESS",JOptionPane.INFORMATION_MESSAGE);
+      }
+   public static void updateTrackerTaxway(int id){
+      Config config =new Config();
+       
+        try{ 
+              Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
+             
+                   PreparedStatement ps3= conn.prepareStatement("SELECT * FROM pa_aprontaxwayrunway_print_tracker WHERE printid='"+id+"'");
+                   
+                   ResultSet rs3=ps3.executeQuery();
+                   
+                   while(rs3.next()){
+            
+                     PreparedStatement ps1= conn.prepareStatement("UPDATE  pa_aprontaxwayrunway_print_tracker SET status=? WHERE printid='"+id+"'");
+                     ps1.setInt(1, 2);
+
+                     ps1.executeUpdate();
+                     
+                   }
+
+          }catch(Exception e){
+              System.out.println("Error in connection"+e);
+ 
+          }
+        
+      
+  }
+   public static void LoopTrackTaxway(){
+      Config config =new Config();
+       
+        try{ 
+              Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
+             
+                   PreparedStatement ps3= conn.prepareStatement("SELECT * FROM pa_aprontaxwayrunway_print_tracker WHERE status<2");
+                   
+               
+                   
+                   ResultSet rs3=ps3.executeQuery();
+                   
+                   while(rs3.next()){
+                       int id=rs3.getInt("printid");
+                       RemoteAction action =new RemoteAction();
+                       action.loopApronTaxways(id);
+
+                     
+                   }
+
+          }catch(Exception e){
+              System.out.println("Error in connection"+e);
+ 
+          }
+        
+      
+  }
+   
+   //Baggagehall   MS Access manipulation 
+   static  public int getBaggageHallId(){
+       System.out.println("Updating Baggage Hall passes");
+       Config config = new Config();
+       int max2=0;
+        try{ 
+              Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
+              
+              PreparedStatement preparedStatement=conn.prepareStatement("SELECT * FROM pp_2122_2_20_2_005_1");
+             
+              ResultSet resultSet=preparedStatement.executeQuery();
+              while(resultSet.next()){
+                   int count=resultSet.getInt("PrintCount");
+                   String by=resultSet.getString("PrintBy");
+                   String date1=resultSet.getString("PrintDateTime");
+                   int id=resultSet.getInt("id");
+                   
+                   
+                   Statement st2=conn.createStatement();
+                   PreparedStatement ps3= conn.prepareStatement("SELECT * FROM pa_baggagehall_print_tracker WHERE printid=?");
+                   ps3.setInt(1,id);
+                   ResultSet rs3=ps3.executeQuery();
+                   
+                   if(!rs3.next()){
+                       if(count>0){
+                      
+                       
+                     String date=java.time.LocalDate.now().toString();
+                     PreparedStatement ps1= conn.prepareStatement("insert into pa_baggagehall_print_tracker values(?,?,?,?,?,?)");
+                     ps1.setInt(1, 1);
+                     ps1.setString(2, date);
+                     ps1.setString(3, date1);
+                     ps1.setInt(4, id);
+                     ps1.setString(5, by);
+                     ps1.setInt(6, 1);
+                     
+                     ps1.executeUpdate();
+                     max2=id;
+
+                   }
+                       
+                   }
+  
+              }
+ 
+          }catch(Exception e){
+              System.out.println("Error in connection"+e);
+ 
+          }
+        
+        return max2;
+    }   
+   static public void createBaggageHallUI(){
+          JFrame frame = new JFrame();
+          JOptionPane.showMessageDialog(frame, "Baggage Hall  record updated","SUCCESS",JOptionPane.INFORMATION_MESSAGE);
+      }
+   public static void updateTrackerBaggageHall(int id){
+      Config config =new Config();
+       
+        try{ 
+              Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
+             
+                   PreparedStatement ps3= conn.prepareStatement("SELECT * FROM pa_baggagehall_print_tracker WHERE printid='"+id+"'");
+                   
+                   ResultSet rs3=ps3.executeQuery();
+                   
+                   while(rs3.next()){
+            
+                     PreparedStatement ps1= conn.prepareStatement("UPDATE  pa_baggagehall_print_tracker SET status=? WHERE printid='"+id+"'");
+                     ps1.setInt(1, 2);
+
+                     ps1.executeUpdate();
+                     
+                   }
+
+          }catch(Exception e){
+              System.out.println("Error in connection"+e);
+ 
+          }
+        
+      
+  }
+   public static void LoopTrackBaggageHall(){
+      Config config =new Config();
+       
+        try{ 
+              Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
+             
+                   PreparedStatement ps3= conn.prepareStatement("SELECT * FROM pa_baggagehall_print_tracker WHERE status<2");
+                   
+               
+                   
+                   ResultSet rs3=ps3.executeQuery();
+                   
+                   while(rs3.next()){
+                       int id=rs3.getInt("printid");
+                       RemoteAction action =new RemoteAction();
+                       action.loopBaggageHalls(id);
+
+                     
+                   }
+
+          }catch(Exception e){
+              System.out.println("Error in connection"+e);
+ 
+          }
+        
+      
+  }
+   
+    //Checkin Counter   MS Access manipulation 
+   static  public int getCheckinCounterId(){
+       System.out.println("Updating Checkin Counter  passes");
+       Config config = new Config();
+       int max2=0;
+        try{ 
+              Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
+              
+              PreparedStatement preparedStatement=conn.prepareStatement("SELECT * FROM pp_2122_2_18_2_005_1");
+             
+              ResultSet resultSet=preparedStatement.executeQuery();
+              while(resultSet.next()){
+                   int count=resultSet.getInt("PrintCount");
+                   String by=resultSet.getString("PrintBy");
+                   String date1=resultSet.getString("PrintDateTime");
+                   int id=resultSet.getInt("id");
+                   
+                   
+                   
+                   Statement st2=conn.createStatement();
+                   PreparedStatement ps3= conn.prepareStatement("SELECT * FROM pa_checkincounter_print_tracker WHERE printid=?");
+                   ps3.setInt(1,id);
+                   ResultSet rs3=ps3.executeQuery();
+                   
+                   if(!rs3.next()){
+                       if(count>0){
+                      
+                       
+                     String date=java.time.LocalDate.now().toString();
+                     PreparedStatement ps1= conn.prepareStatement("insert into pa_checkincounter_print_tracker values(?,?,?,?,?,?)");
+                     ps1.setInt(1, 1);
+                     ps1.setString(2, date);
+                     ps1.setString(3, date1);
+                     ps1.setInt(4, id);
+                     ps1.setString(5, by);
+                     ps1.setInt(6, 1);
+                     
+                     ps1.executeUpdate();
+                     max2=id;
+
+                   }
+                       
+                   }
+  
+              }
+ 
+          }catch(Exception e){
+              System.out.println("Error in connection"+e);
+ 
+          }
+        
+        return max2;
+       
+
+    }   
+   static public void createCheckinCounterUI(){
+          JFrame frame = new JFrame();
+          JOptionPane.showMessageDialog(frame, "Checkin counter  record updated","SUCCESS",JOptionPane.INFORMATION_MESSAGE);
+      }
+   public static void updateTrackerCheckinCounter(int id){
+      Config config =new Config();
+       
+        try{ 
+              Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
+             
+                   PreparedStatement ps3= conn.prepareStatement("SELECT * FROM pa_checkincounter_print_tracker WHERE printid='"+id+"'");
+                   
+                   ResultSet rs3=ps3.executeQuery();
+                   
+                   while(rs3.next()){
+            
+                     PreparedStatement ps1= conn.prepareStatement("UPDATE  pa_checkincounter_print_tracker SET status=? WHERE printid='"+id+"'");
+                     ps1.setInt(1, 2);
+
+                     ps1.executeUpdate();
+                     
+                   }
+
+          }catch(Exception e){
+              System.out.println("Error in connection"+e);
+ 
+          }
+        
+      
+  }
+   public static void LoopTrackCheckinCounter(){
+      Config config =new Config();
+       
+        try{ 
+              Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
+             
+                   PreparedStatement ps3= conn.prepareStatement("SELECT * FROM pa_checkincounter_print_tracker WHERE status<2");
+                   
+               
+                   
+                   ResultSet rs3=ps3.executeQuery();
+                   
+                   while(rs3.next()){
+                       int id=rs3.getInt("printid");
+                       RemoteAction action =new RemoteAction();
+                       action.loopCheckinCounters(id);
+
+                     
+                   }
+
+          }catch(Exception e){
+              System.out.println("Error in connection"+e);
+ 
+          }
+        
+      
+  }
+   
+   //Con Course Arrival    MS Access manipulation 
+   static  public int getConCourseId(){
+       System.out.println("Updating ConCourse Arrivals passes");
+       Config config = new Config();
+       int max2=0;
+        try{ 
+              Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
+              
+              PreparedStatement preparedStatement=conn.prepareStatement("SELECT *FROM  pp_2122_2_19_2_005_1");
+             
+              ResultSet resultSet=preparedStatement.executeQuery();
+              while(resultSet.next()){
+                   int count=resultSet.getInt("PrintCount");
+                   String by=resultSet.getString("PrintBy");
+                   String date1=resultSet.getString("PrintDateTime");
+                   int id=resultSet.getInt("id");
+                   
+                   
+                   Statement st2=conn.createStatement();
+                   PreparedStatement ps3= conn.prepareStatement("SELECT * FROM pa_concoursearrivals_print_mgr WHERE printid=?");
+                   ps3.setInt(1,id);
+                   ResultSet rs3=ps3.executeQuery();
+                   
+                   if(!rs3.next()){
+                       if(count>0){
+                      
+                       
+                     String date=java.time.LocalDate.now().toString();
+                     PreparedStatement ps1= conn.prepareStatement("insert into pa_concoursearrivals_print_mgr values(?,?,?,?,?,?)");
+                     ps1.setInt(1, 1);
+                     ps1.setString(2, date);
+                     ps1.setString(3, date1);
+                     ps1.setInt(4, id);
+                     ps1.setString(5, by);
+                     ps1.setInt(6, 1);
+                     
+                     ps1.executeUpdate();
+                     max2=id;
+
+                   }
+                       
+                   }
+  
+              }
+ 
+          }catch(Exception e){
+              System.out.println("Error in connection"+e);
+ 
+          }
+        
+        return max2;
+    }   
+   static public void createConCourseUI(){
+          JFrame frame = new JFrame();
+          JOptionPane.showMessageDialog(frame, "Con course arrival  record updated","SUCCESS",JOptionPane.INFORMATION_MESSAGE);
+      }
+   public static void updateTrackerConCourse(int id){
+      Config config =new Config();
+       
+        try{ 
+              Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
+             
+                   PreparedStatement ps3= conn.prepareStatement("SELECT * FROM pa_concoursearrivals_print_mgr WHERE printid='"+id+"'");
+                   
+                   ResultSet rs3=ps3.executeQuery();
+                   
+                   while(rs3.next()){
+            
+                     PreparedStatement ps1= conn.prepareStatement("UPDATE  pa_concoursearrivals_print_mgr SET status=? WHERE printid='"+id+"'");
+                     ps1.setInt(1, 2);
+
+                     ps1.executeUpdate();
+                     
+                   }
+
+          }catch(Exception e){
+              System.out.println("Error in connection"+e);
+ 
+          }
+        
+      
+  }
+   public static void LoopTrackConCourse(){
+      Config config =new Config();
+       
+        try{ 
+              Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+              Connection conn= DriverManager.getConnection("jdbc:ucanaccess://"+config.getAccessHost()+config.getAccessDb(),config.getAccessPassword(),config.getAccessPassword());
+             
+                   PreparedStatement ps3= conn.prepareStatement("SELECT * FROM pa_concoursearrivals_print_mgr WHERE status<2");
+                   
+               
+                   
+                   ResultSet rs3=ps3.executeQuery();
+                   
+                   while(rs3.next()){
+                       int id=rs3.getInt("printid");
+                       RemoteAction action =new RemoteAction();
+                       action.loopConCourses(id);
 
                      
                    }
